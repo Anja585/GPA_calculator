@@ -66,7 +66,6 @@ def calculate_gpa(final_list):
         gpa_rounded = np.round(gpa, 2)
         final_gpa.append(gpa_rounded)
     return final_gpa
-   
 
 # returns the name of the highest scoring module
 def highest_scoring_module(final_list):
@@ -159,42 +158,56 @@ def letter_grades(final_list):
         final_results.append(result)
     return final_results
 
-
-
-
-
+def next_highest(final_list):
+    gpa = calculate_gpa(final_list)
+    gpa_sorted = sorted(gpa)
+    names = list(final_list.keys())
+    result = dict(zip(names, gpa))
+    result_sorted = {k: v for k, v in sorted(result.items(), key=lambda item: item[1])}
+    differences = []
+    for i in range(len(gpa_sorted)):
+        difference = np.round((gpa_sorted[i] - gpa_sorted[i-1]), 3) 
+        differences.append(difference)
+    last = np.round((4.2 - gpa_sorted[-1]), 3)
+    differences.append(last)
+    differences_final = differences[1:] 
+    return dict(zip(names, differences_final))
+    
 # main function
 if __name__ == '__main__':
-    os.system('cls')
+    os.system('cls')    
     names = []
-    # marks = []
-    # module_names = []
     marks_module_names = []
     while True:
         marks = []
         module_names = []
+        print('To quit or insert data for another student press 0')
         name = str(input('Enter student name: '))
-        if name  == 'Y':
+        if name  == '0':
             break
         names.append(name)
         while True:           
             module = str(input('Enter module name: '))
-            if module  == 'Y':
+            if module  == '0':
                 break
             grade_in_percentage = int(input('Enter grade (%): '))
-            if grade_in_percentage == 0:
+            if grade_in_percentage  == 0:
                 break
             module_names.append(module)
             marks.append(grade_in_percentage)
         marks_module_names.append(dict(zip(marks, module_names)))
     final_list = dict(zip(names, marks_module_names))
-    # calculate_gpa(final_list)
-    # highest_scoring_module(final_list)
-    # lowest_scoring_module(final_list)
-    # standard_deviation(final_list)
-    # median(final_list)
-    # letter_grades(final_list)
-    # for i in letter_grades(marks, module_names):
-    #     module = str(letter_grades(marks, module_names)[i])
-    #     print(f'{module}: {i}') 
-    # print(final_list)
+    if len(list(final_list.keys())) == 0:
+        print('Not enough data')
+        print('End')
+    else:        
+        print(calculate_gpa(final_list))
+        print(highest_scoring_module(final_list))
+        print(lowest_scoring_module(final_list))
+        print(standard_deviation(final_list))
+        print(median(final_list))
+        print(next_highest(final_list))
+        print(letter_grades(final_list))
+        # for i in letter_grades(marks, module_names):
+        #     module = str(letter_grades(marks, module_names)[i])
+        #     print(f'{module}: {i}') 
