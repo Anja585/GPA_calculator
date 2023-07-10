@@ -162,8 +162,6 @@ def next_highest(final_list):
     gpa = calculate_gpa(final_list)
     gpa_sorted = sorted(gpa)
     names = list(final_list.keys())
-    result = dict(zip(names, gpa))
-    result_sorted = {k: v for k, v in sorted(result.items(), key=lambda item: item[1])}
     differences = []
     for i in range(len(gpa_sorted)):
         difference = np.round((gpa_sorted[i] - gpa_sorted[i-1]), 3) 
@@ -190,24 +188,34 @@ if __name__ == '__main__':
             module = str(input('Enter module name: '))
             if module  == '0':
                 break
-            grade_in_percentage = int(input('Enter grade (%): '))
-            if grade_in_percentage  == 0:
-                break
-            module_names.append(module)
-            marks.append(grade_in_percentage)
+            try:
+                grade_in_percentage = int(input('Enter grade (%): '))
+                if grade_in_percentage  == 0:
+                    break
+                marks.append(grade_in_percentage)    
+            except:
+                ValueError
+                print('Use number characters only!')
+            module_names.append(module)            
         marks_module_names.append(dict(zip(marks, module_names)))
     final_list = dict(zip(names, marks_module_names))
     if len(list(final_list.keys())) == 0:
         print('Not enough data')
         print('End')
-    else:        
-        print(calculate_gpa(final_list))
-        print(highest_scoring_module(final_list))
-        print(lowest_scoring_module(final_list))
-        print(standard_deviation(final_list))
-        print(median(final_list))
-        print(next_highest(final_list))
-        print(letter_grades(final_list))
-        # for i in letter_grades(marks, module_names):
-        #     module = str(letter_grades(marks, module_names)[i])
-        #     print(f'{module}: {i}') 
+    else: 
+        print('\nGPA')
+        print(f'{dict(zip(names, calculate_gpa(final_list)))}\n') 
+        print('Highest scoring module')
+        print(f'{dict(zip(names, highest_scoring_module(final_list)))}\n') 
+        print('Lowest scoring module')
+        print(f'{dict(zip(names, lowest_scoring_module(final_list)))}\n')
+        print('Standard deviation')
+        print(f'{dict(zip(names, standard_deviation(final_list)))}\n')
+        print('Median')
+        print(f'{dict(zip(names, median(final_list)))}\n')
+        print('Gap from the next highest GPA')       
+        print(f'{next_highest(final_list)}\n')
+        print('Letter grades')
+        print(f'{dict(zip(names, letter_grades(final_list)))}\n')
+        
+        
