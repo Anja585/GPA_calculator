@@ -135,11 +135,6 @@ class GPA_calculator:
             return result
 
             
-
-# a = GPA_calculator('Anja', {90:'data', 80:"machine"})   
-# print(a.highest_scoring_module())
-
-
 # main function
 if __name__ == '__main__':
     os.system('cls')    
@@ -167,10 +162,48 @@ if __name__ == '__main__':
                 print('Use number characters only!')
             module_names.append(module)            
         marks_module_names.append(dict(zip(marks, module_names)))
-    
-    
-    # final_list = dict(zip(names, marks_module_names))
-    # if len(list(final_list.keys())) == 0:
-    #     print('Not enough data')
-    #     print('End')
+    final_list = dict(zip(names, marks_module_names))    
+    gpa_objects = []
+    gpas = []
+    highest_scoring_modules = []
+    lowest_scoring_modules = []
+    st_deviations = []
+    medians = []
+    letter_grades = []
+    for i in final_list:
+        gpa_object = GPA_calculator(i, final_list[i])
+        gpa_objects.append(gpa_object)
+    for i in gpa_objects:
+        gpa = i.calculate_gpa()
+        gpas.append(gpa)
+        highest_scoring_module = i.highest_scoring_module()
+        highest_scoring_modules.append(highest_scoring_module)
+        lowest_scoring_module = i.highest_scoring_module()
+        lowest_scoring_modules.append(lowest_scoring_module)
+        st_deviation = i.standard_deviation()
+        st_deviations.append(st_deviation)
+        median = i.median()
+        medians.append(median)
+        letter_grade = i.letter_grades()
+        letter_grades.append(letter_grade)
+    if len(list(final_list.keys())) == 0:
+        print('Not enough data')
+        print('End')
+    else: 
+        print('\nGPA')
+        print(f'{dict(zip(names, gpas))}\n') 
+        print('Highest scoring module')
+        print(f'{dict(zip(names, highest_scoring_modules))}\n') 
+        print('Lowest scoring module')
+        print(f'{dict(zip(names, lowest_scoring_modules))}\n')
+        print('Standard deviation')
+        print(f'{dict(zip(names, st_deviations))}\n')
+        print('Median')
+        print(f'{dict(zip(names, medians))}\n')
+        # print('Gap from the next highest GPA')       
+        # print(f'{next_highest(final_list)}\n')
+        print('Letter grades')
+        print(f'{dict(zip(names, letter_grades))}\n')
+        
+        
     
