@@ -136,11 +136,14 @@ class GPA_calculator:
 
     def next_highest(self, gpas):
         gpa_sorted = sorted(gpas)
-        for i in range(len(gpa_sorted)):
+        for i in gpa_sorted:
             if i > self.calculate_gpa():
-                difference = np.round((gpa_sorted[i] - self.calculate_gpa()), 3)
-                break          
-        return difference
+                difference = np.round((i - self.calculate_gpa()), 3)
+                break
+            elif 4.2 > self.calculate_gpa():
+                difference = np.round((4.2 - self.calculate_gpa()), 3)
+        return difference          
+            
                 
 # main function
 if __name__ == '__main__':
@@ -192,10 +195,11 @@ if __name__ == '__main__':
         st_deviations.append(st_deviation)
         median = i.median()
         medians.append(median)
-        next_high = i.next_highest(gpas)
-        next_highest.append(next_high)
         letter_grade = i.letter_grades()
         letter_grades.append(letter_grade)
+    for i in gpa_objects:
+        next_high = i.next_highest(gpas)
+        next_highest.append(next_high)
     if len(list(final_list.keys())) == 0:
         print('Not enough data')
         print('End')
