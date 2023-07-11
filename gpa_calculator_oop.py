@@ -134,7 +134,14 @@ class GPA_calculator:
             result = dict(zip(letter_grades, module_names))
             return result
 
-            
+    def next_highest(self, gpas):
+        gpa_sorted = sorted(gpas)
+        for i in range(len(gpa_sorted)):
+            if i > self.calculate_gpa():
+                difference = np.round((gpa_sorted[i] - self.calculate_gpa()), 3)
+                break          
+        return difference
+                
 # main function
 if __name__ == '__main__':
     os.system('cls')    
@@ -169,6 +176,7 @@ if __name__ == '__main__':
     lowest_scoring_modules = []
     st_deviations = []
     medians = []
+    next_highest = []
     letter_grades = []
     for i in final_list:
         gpa_object = GPA_calculator(i, final_list[i])
@@ -184,6 +192,8 @@ if __name__ == '__main__':
         st_deviations.append(st_deviation)
         median = i.median()
         medians.append(median)
+        next_high = i.next_highest(gpas)
+        next_highest.append(next_high)
         letter_grade = i.letter_grades()
         letter_grades.append(letter_grade)
     if len(list(final_list.keys())) == 0:
@@ -200,8 +210,8 @@ if __name__ == '__main__':
         print(f'{dict(zip(names, st_deviations))}\n')
         print('Median')
         print(f'{dict(zip(names, medians))}\n')
-        # print('Gap from the next highest GPA')       
-        # print(f'{next_highest(final_list)}\n')
+        print('Gap from the next highest GPA')       
+        print(f'{dict(zip(names, next_highest))}\n')
         print('Letter grades')
         print(f'{dict(zip(names, letter_grades))}\n')
         
