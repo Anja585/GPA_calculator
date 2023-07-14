@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pandas as pd
 
 # maps letter grade to GPA scale
 grade = { 
@@ -28,6 +29,10 @@ def user_interface():
     while True:
         marks = []
         module_names = []
+        # file = str(input('Would you like to import a file (Y/N): '))
+        # if file == 'Y':
+        #     final_list = file_import()
+        #     return final_list
         print('To quit or insert data for another student press 0')
         name = str(input('Enter student name: '))
         if name  == '0':
@@ -46,60 +51,67 @@ def user_interface():
                 ValueError
                 print('Use number characters only!')
             module_names.append(module)            
-        marks_module_names.append(dict(zip(marks, module_names)))
+        marks_module_names.append(dict(zip(module_names, marks)))
+        # marks_module_names.append(dict(zip(marks, module_names)))
     final_list = dict(zip(names, marks_module_names))
     return final_list
 
+def file_import():
+    df = pd.read_csv('MPPSample.csv', index_col=0)
+    df_new = df.to_dict('index')
+    print(df_new)
+    return None
 
 def map_percentage_points_to_grades(percentage_grade):
+    grade_keys = list(grade.keys())
     if percentage_grade >= 90:
         gpa_scale_grade = grade["A+"]
-        letter_grade = "A+"
+        letter_grade = grade_keys[0]
     elif percentage_grade >= 80:
         gpa_scale_grade = grade["A"]
-        letter_grade = "A"
+        letter_grade = grade_keys[1]
     elif percentage_grade >= 70:
         gpa_scale_grade = grade["A-"]
-        letter_grade = "A"
+        letter_grade = grade_keys[2]
     elif percentage_grade >= 67:
         gpa_scale_grade = grade["B+"]
-        letter_grade = "B+"
+        letter_grade = grade_keys[3]
     elif percentage_grade >= 64:
         gpa_scale_grade = grade["B"]
-        letter_grade = "B"
+        letter_grade = grade_keys[4]
     elif percentage_grade >= 60:
         gpa_scale_grade = grade["B-"]
-        letter_grade = "B-"
+        letter_grade = grade_keys[5]
     elif percentage_grade >= 57:
         gpa_scale_grade = grade["C+"]
-        letter_grade = "C+"
+        letter_grade = grade_keys[6]
     elif percentage_grade >= 54:
         gpa_scale_grade = grade["C"]
-        letter_grade = "C"
+        letter_grade = grade_keys[7]
     elif percentage_grade >= 50:
         gpa_scale_grade = grade["C-"]
-        letter_grade = "C-"
+        letter_grade = grade_keys[8]
     elif percentage_grade == 49:
         gpa_scale_grade = grade["D+"]
-        letter_grade = "D+"
+        letter_grade = grade_keys[9]
     elif percentage_grade >= 47:
         gpa_scale_grade = grade["D"]
-        letter_grade = "D"
+        letter_grade = grade_keys[10]
     elif percentage_grade >= 45:
         gpa_scale_grade = grade["D-"]
-        letter_grade = "D-"
+        letter_grade = grade_keys[11]
     elif percentage_grade == 44:
         gpa_scale_grade = grade["E+"]
-        letter_grade = "E+"
+        letter_grade = grade_keys[12]
     elif percentage_grade >= 42:
         gpa_scale_grade = grade["E"]
-        letter_grade = "E"
+        letter_grade = grade_keys[13]
     elif percentage_grade >= 40:
         gpa_scale_grade = grade["E-"]
-        letter_grade = "E-"
+        letter_grade = grade_keys[14]
     elif percentage_grade == 39:
         gpa_scale_grade = grade["F+"]
-        letter_grade = "F+"
+        letter_grade = grade_keys[15]
     else: 
         gpa_scale_grade = grade["F"]
         letter_grade = "F" 
@@ -112,7 +124,8 @@ def calculate_gpa(final_list):
     for i in final_list:
         pairs = final_list[i]
         gpa_scale_grades = []
-        for percentage_grade in pairs:
+        for p in pairs:
+            percentage_grade = pairs[p]
             gpa_scale_grade, letter_grade = map_percentage_points_to_grades(percentage_grade)
             gpa_scale_grades.append(gpa_scale_grade)
         gpa = np.average(gpa_scale_grades)
@@ -125,10 +138,8 @@ def highest_scoring_module(final_list):
     highest_scoring_modules = []
     for i in final_list:
         pairs = final_list[i]
-        pair_keys = list(pairs.keys())
-        pair_keys.sort()
-        sorted_pairs = {i: pairs[i] for i in pair_keys}
-        highest_scoring_module = list(sorted_pairs.values())[-1]
+        sorted_pairs = dict(sorted(pairs.items(), key=lambda x: x[1]))
+        highest_scoring_module = list(sorted_pairs.keys())[-1]
         highest_scoring_modules.append(highest_scoring_module)        
     return highest_scoring_modules
 
@@ -137,10 +148,8 @@ def lowest_scoring_module(final_list):
     lowest_scoring_modules = []
     for i in final_list:
         pairs = final_list[i]
-        pair_keys = list(pairs.keys())
-        pair_keys.sort()
-        sorted_pairs = {i: pairs[i] for i in pair_keys}
-        lowest_scoring_module = list(sorted_pairs.values())[0]
+        sorted_pairs = dict(sorted(pairs.items(), key=lambda x: x[1]))
+        lowest_scoring_module = list(sorted_pairs.keys())[0]
         lowest_scoring_modules.append(lowest_scoring_module)        
     return lowest_scoring_modules
 
@@ -149,8 +158,8 @@ def standard_deviation(final_list):
     standard_deviations = []
     for i in final_list:
         pairs = final_list[i]
-        pair_keys = list(pairs.keys())    
-        st_deviation = np.std(pair_keys)
+        pair_values = list(pairs.values())    
+        st_deviation = np.std(pair_values)
         st_deviation_rounded = round(st_deviation, 2) 
         standard_deviations.append(st_deviation_rounded)
     return standard_deviations
@@ -160,8 +169,8 @@ def median(final_list):
     medians = []
     for i in final_list:
         pairs = final_list[i]
-        pair_keys = list(pairs.keys())  
-        median = np.median(pair_keys)
+        pair_values = list(pairs.values())  
+        median = np.median(pair_values)
         median_rounded = round(median, 2) 
         medians.append(median_rounded)
     return medians
@@ -172,11 +181,12 @@ def letter_grades(final_list):
     for i in final_list:
         pairs = final_list[i]
         letter_grades = []
-        module_names = list(pairs.values())
-        for percentage_grade in pairs:
+        module_names = list(pairs.keys())
+        for p in pairs:
+            percentage_grade = pairs[p]
             gpa_scale_grade, letter_grade = map_percentage_points_to_grades(percentage_grade)
             letter_grades.append(letter_grade)
-        result = dict(zip(letter_grades, module_names))
+        result = dict(zip(module_names, letter_grades))
         final_results.append(result)
     return final_results
 
