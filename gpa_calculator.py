@@ -24,7 +24,7 @@ grade = {
         "F": 1   
         }
 
-def user_interface():
+def create_student():
     names = []
     marks_module_names = []
     file = str(input('Would you like to import a file (Y/N): '))
@@ -215,7 +215,7 @@ def next_highest(final_list):
 # main function
 if __name__ == '__main__':
     os.system('cls')    
-    final_list = user_interface()
+    final_list = create_student()
     if len(list(final_list.keys())) == 0:
         print('Not enough data')
         print('End')
