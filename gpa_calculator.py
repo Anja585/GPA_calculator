@@ -22,6 +22,90 @@ grade = {
         "F": 1   
         }
 
+def user_interface():
+    names = []
+    marks_module_names = []
+    while True:
+        marks = []
+        module_names = []
+        print('To quit or insert data for another student press 0')
+        name = str(input('Enter student name: '))
+        if name  == '0':
+            break
+        names.append(name)
+        while True:           
+            module = str(input('Enter module name: '))
+            if module  == '0':
+                break
+            try:
+                grade_in_percentage = int(input('Enter grade (%): '))
+                if grade_in_percentage  == 0:
+                    break
+                marks.append(grade_in_percentage)    
+            except:
+                ValueError
+                print('Use number characters only!')
+            module_names.append(module)            
+        marks_module_names.append(dict(zip(marks, module_names)))
+    final_list = dict(zip(names, marks_module_names))
+    return final_list
+
+
+def map_percentage_points_to_grades(percentage_grade):
+    if percentage_grade >= 90:
+        gpa_scale_grade = grade["A+"]
+        letter_grade = "A+"
+    elif percentage_grade >= 80:
+        gpa_scale_grade = grade["A"]
+        letter_grade = "A"
+    elif percentage_grade >= 70:
+        gpa_scale_grade = grade["A-"]
+        letter_grade = "A"
+    elif percentage_grade >= 67:
+        gpa_scale_grade = grade["B+"]
+        letter_grade = "B+"
+    elif percentage_grade >= 64:
+        gpa_scale_grade = grade["B"]
+        letter_grade = "B"
+    elif percentage_grade >= 60:
+        gpa_scale_grade = grade["B-"]
+        letter_grade = "B-"
+    elif percentage_grade >= 57:
+        gpa_scale_grade = grade["C+"]
+        letter_grade = "C+"
+    elif percentage_grade >= 54:
+        gpa_scale_grade = grade["C"]
+        letter_grade = "C"
+    elif percentage_grade >= 50:
+        gpa_scale_grade = grade["C-"]
+        letter_grade = "C-"
+    elif percentage_grade == 49:
+        gpa_scale_grade = grade["D+"]
+        letter_grade = "D+"
+    elif percentage_grade >= 47:
+        gpa_scale_grade = grade["D"]
+        letter_grade = "D"
+    elif percentage_grade >= 45:
+        gpa_scale_grade = grade["D-"]
+        letter_grade = "D-"
+    elif percentage_grade == 44:
+        gpa_scale_grade = grade["E+"]
+        letter_grade = "E+"
+    elif percentage_grade >= 42:
+        gpa_scale_grade = grade["E"]
+        letter_grade = "E"
+    elif percentage_grade >= 40:
+        gpa_scale_grade = grade["E-"]
+        letter_grade = "E-"
+    elif percentage_grade == 39:
+        gpa_scale_grade = grade["F+"]
+        letter_grade = "F+"
+    else: 
+        gpa_scale_grade = grade["F"]
+        letter_grade = "F" 
+    return gpa_scale_grade, letter_grade
+    
+
 # returns gpa from a user input
 def calculate_gpa(final_list):
     final_gpa = []
@@ -29,39 +113,8 @@ def calculate_gpa(final_list):
         pairs = final_list[i]
         gpa_scale_grades = []
         for percentage_grade in pairs:
-            if percentage_grade >= 90:
-                gpa_scale_grades.append(grade["A+"])
-            elif percentage_grade >= 80:
-                gpa_scale_grades.append(grade["A"])
-            elif percentage_grade >= 70:
-                gpa_scale_grades.append(grade["A-"])
-            elif percentage_grade >= 67:
-                gpa_scale_grades.append(grade["B+"])
-            elif percentage_grade >= 64:
-                gpa_scale_grades.append(grade["B"])
-            elif percentage_grade >= 60:
-                gpa_scale_grades.append(grade["B-"])
-            elif percentage_grade >= 57:
-                gpa_scale_grades.append(grade["C+"])
-            elif percentage_grade >= 54:
-                gpa_scale_grades.append(grade["C"])
-            elif percentage_grade >= 50:
-                gpa_scale_grades.append(grade["C-"])
-            elif percentage_grade == 49:
-                gpa_scale_grades.append(grade["D+"])
-            elif percentage_grade >= 47:
-                gpa_scale_grades.append(grade["D"])
-            elif percentage_grade >= 45:
-                gpa_scale_grades.append(grade["D-"])
-            elif percentage_grade == 44:
-                gpa_scale_grades.append(grade["E+"])
-            elif percentage_grade >= 42:
-                gpa_scale_grades.append(grade["E"])
-            elif percentage_grade >= 40:
-                gpa_scale_grades.append(grade["E-"])
-            elif percentage_grade == 39:
-                gpa_scale_grades.append(grade["F+"])
-            else: gpa_scale_grades.append(grade["F"])
+            gpa_scale_grade, letter_grade = map_percentage_points_to_grades(percentage_grade)
+            gpa_scale_grades.append(gpa_scale_grade)
         gpa = np.average(gpa_scale_grades)
         gpa_rounded = np.round(gpa, 2)
         final_gpa.append(gpa_rounded)
@@ -121,39 +174,8 @@ def letter_grades(final_list):
         letter_grades = []
         module_names = list(pairs.values())
         for percentage_grade in pairs:
-            if percentage_grade >= 90:
-                letter_grades.append("A+")
-            elif percentage_grade >= 80:
-                letter_grades.append("A")
-            elif percentage_grade >= 70:
-                letter_grades.append("A-")
-            elif percentage_grade >= 67:
-                letter_grades.append("B+")
-            elif percentage_grade >= 64:
-                letter_grades.append("B")
-            elif percentage_grade >= 60:
-                letter_grades.append("B-")
-            elif percentage_grade >= 57:
-                letter_grades.append("C+")
-            elif percentage_grade >= 54:
-                letter_grades.append("C")
-            elif percentage_grade >= 50:
-                letter_grades.append("C-")
-            elif percentage_grade == 49:
-                letter_grades.append("D+")
-            elif percentage_grade >= 47:
-                letter_grades.append("D")
-            elif percentage_grade >= 45:
-                letter_grades.append("D-")
-            elif percentage_grade == 44:
-                letter_grades.append("E+")
-            elif percentage_grade >= 42:
-                letter_grades.append("E")
-            elif percentage_grade >= 40:
-                letter_grades.append("E-")
-            elif percentage_grade == 39:
-                letter_grades.append("F+")
-            else: letter_grades.append("F")
+            gpa_scale_grade, letter_grade = map_percentage_points_to_grades(percentage_grade)
+            letter_grades.append(letter_grade)
         result = dict(zip(letter_grades, module_names))
         final_results.append(result)
     return final_results
@@ -171,33 +193,6 @@ def next_highest(final_list):
     differences_final = differences[1:] 
     return dict(zip(names, differences_final))
     
-def user_interface():
-    names = []
-    marks_module_names = []
-    while True:
-        marks = []
-        module_names = []
-        print('To quit or insert data for another student press 0')
-        name = str(input('Enter student name: '))
-        if name  == '0':
-            break
-        names.append(name)
-        while True:           
-            module = str(input('Enter module name: '))
-            if module  == '0':
-                break
-            try:
-                grade_in_percentage = int(input('Enter grade (%): '))
-                if grade_in_percentage  == 0:
-                    break
-                marks.append(grade_in_percentage)    
-            except:
-                ValueError
-                print('Use number characters only!')
-            module_names.append(module)            
-        marks_module_names.append(dict(zip(marks, module_names)))
-    final_list = dict(zip(names, marks_module_names))
-    return final_list
 
 
 # main function
