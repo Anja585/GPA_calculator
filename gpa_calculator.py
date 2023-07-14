@@ -171,9 +171,7 @@ def next_highest(final_list):
     differences_final = differences[1:] 
     return dict(zip(names, differences_final))
     
-# main function
-if __name__ == '__main__':
-    os.system('cls')    
+def user_interface():
     names = []
     marks_module_names = []
     while True:
@@ -199,6 +197,14 @@ if __name__ == '__main__':
             module_names.append(module)            
         marks_module_names.append(dict(zip(marks, module_names)))
     final_list = dict(zip(names, marks_module_names))
+    return final_list
+
+
+# main function
+if __name__ == '__main__':
+    os.system('cls')    
+    final_list = user_interface()
+    names = list(final_list.keys())
     if len(list(final_list.keys())) == 0:
         print('Not enough data')
         print('End')
