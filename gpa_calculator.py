@@ -26,41 +26,40 @@ grade = {
 def user_interface():
     names = []
     marks_module_names = []
-    while True:
-        marks = []
-        module_names = []
-        # file = str(input('Would you like to import a file (Y/N): '))
-        # if file == 'Y':
-        #     final_list = file_import()
-        #     return final_list
-        print('To quit or insert data for another student press 0')
-        name = str(input('Enter student name: '))
-        if name  == '0':
-            break
-        names.append(name)
-        while True:           
-            module = str(input('Enter module name: '))
-            if module  == '0':
+    file = str(input('Would you like to import a file (Y/N): '))
+    if file == 'Y':
+        final_list = file_import()
+        return final_list
+    else:
+        while True:
+            marks = []
+            module_names = []            
+            print('To quit or insert data for another student press 0')
+            name = str(input('Enter student name: '))
+            if name  == '0':
                 break
-            try:
-                grade_in_percentage = int(input('Enter grade (%): '))
-                if grade_in_percentage  == 0:
+            names.append(name)
+            while True:           
+                module = str(input('Enter module name: '))
+                if module  == '0':
                     break
-                marks.append(grade_in_percentage)    
-            except:
-                ValueError
-                print('Use number characters only!')
-            module_names.append(module)            
-        marks_module_names.append(dict(zip(module_names, marks)))
-        # marks_module_names.append(dict(zip(marks, module_names)))
-    final_list = dict(zip(names, marks_module_names))
+                try:
+                    grade_in_percentage = int(input('Enter grade (%): '))
+                    if grade_in_percentage  == 0:
+                        break
+                    marks.append(grade_in_percentage)    
+                except:
+                    ValueError
+                    print('Use number characters only!')
+                module_names.append(module)            
+            marks_module_names.append(dict(zip(module_names, marks)))
+        final_list = dict(zip(names, marks_module_names))
     return final_list
 
 def file_import():
     df = pd.read_csv('MPPSample.csv', index_col=0)
-    df_new = df.to_dict('index')
-    print(df_new)
-    return None
+    json_file = df.to_dict('index')
+    return json_file
 
 def map_percentage_points_to_grades(percentage_grade):
     grade_keys = list(grade.keys())
