@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+import tkinter.filedialog
 
 # maps letter grade to GPA scale
 grade = { 
@@ -57,10 +58,11 @@ def user_interface():
     return final_list
 
 def file_import():
-    df = pd.read_csv('MPPSample.csv', index_col=0)
-    json_file = df.to_dict('index')
-    return json_file
-
+    filename = tkinter.filedialog.askopenfile()
+    df = pd.read_csv(filename, index_col=0)
+    dict_file = df.to_dict('index')
+    return dict_file
+    
 def map_percentage_points_to_grades(percentage_grade):
     grade_keys = list(grade.keys())
     if percentage_grade >= 90:
@@ -119,6 +121,7 @@ def map_percentage_points_to_grades(percentage_grade):
 
 # returns gpa from a user input
 def calculate_gpa(final_list):
+    names = final_list.keys()
     final_gpa = []
     for i in final_list:
         pairs = final_list[i]
@@ -129,31 +132,34 @@ def calculate_gpa(final_list):
             gpa_scale_grades.append(gpa_scale_grade)
         gpa = np.average(gpa_scale_grades)
         gpa_rounded = np.round(gpa, 2)
-        final_gpa.append(gpa_rounded)
-    return final_gpa
+        final_gpa.append(gpa_rounded)        
+    return dict(zip(names,final_gpa))
 
 # returns the name of the highest scoring module
 def highest_scoring_module(final_list):
+    names = final_list.keys()
     highest_scoring_modules = []
     for i in final_list:
         pairs = final_list[i]
         sorted_pairs = dict(sorted(pairs.items(), key=lambda x: x[1]))
         highest_scoring_module = list(sorted_pairs.keys())[-1]
         highest_scoring_modules.append(highest_scoring_module)        
-    return highest_scoring_modules
+    return dict(zip(names,highest_scoring_modules)) 
 
 # returns the name of the lowest scoring module
 def lowest_scoring_module(final_list):
+    names = final_list.keys()
     lowest_scoring_modules = []
     for i in final_list:
         pairs = final_list[i]
         sorted_pairs = dict(sorted(pairs.items(), key=lambda x: x[1]))
         lowest_scoring_module = list(sorted_pairs.keys())[0]
         lowest_scoring_modules.append(lowest_scoring_module)        
-    return lowest_scoring_modules
+    return dict(zip(names,lowest_scoring_modules))
 
 # returns standard deviation
 def standard_deviation(final_list):
+    names = final_list.keys()
     standard_deviations = []
     for i in final_list:
         pairs = final_list[i]
@@ -161,10 +167,11 @@ def standard_deviation(final_list):
         st_deviation = np.std(pair_values)
         st_deviation_rounded = round(st_deviation, 2) 
         standard_deviations.append(st_deviation_rounded)
-    return standard_deviations
+    return dict(zip(names,standard_deviations))
 
 # returns median
 def median(final_list):
+    names = final_list.keys()
     medians = []
     for i in final_list:
         pairs = final_list[i]
@@ -172,10 +179,12 @@ def median(final_list):
         median = np.median(pair_values)
         median_rounded = round(median, 2) 
         medians.append(median_rounded)
-    return medians
+    return dict(zip(names,medians))
+
 
 # return module names and letter grades
 def letter_grades(final_list):
+    names = final_list.keys()
     final_results = []
     for i in final_list:
         pairs = final_list[i]
@@ -187,10 +196,10 @@ def letter_grades(final_list):
             letter_grades.append(letter_grade)
         result = dict(zip(module_names, letter_grades))
         final_results.append(result)
-    return final_results
+    return dict(zip(names,final_results))
 
 def next_highest(final_list):
-    gpa = calculate_gpa(final_list)
+    gpa = list(calculate_gpa(final_list).values())
     gpa_sorted = sorted(gpa)
     names = list(final_list.keys())
     differences = []
@@ -203,29 +212,27 @@ def next_highest(final_list):
     return dict(zip(names, differences_final))
     
 
-
 # main function
 if __name__ == '__main__':
     os.system('cls')    
     final_list = user_interface()
-    names = list(final_list.keys())
     if len(list(final_list.keys())) == 0:
         print('Not enough data')
         print('End')
     else: 
         print('\nGPA')
-        print(f'{dict(zip(names, calculate_gpa(final_list)))}\n') 
+        print(f'{calculate_gpa(final_list)}\n')
         print('Highest scoring module')
-        print(f'{dict(zip(names, highest_scoring_module(final_list)))}\n') 
+        print(f'{highest_scoring_module(final_list)}\n')
         print('Lowest scoring module')
-        print(f'{dict(zip(names, lowest_scoring_module(final_list)))}\n')
+        print(f'{lowest_scoring_module(final_list)}\n')
         print('Standard deviation')
-        print(f'{dict(zip(names, standard_deviation(final_list)))}\n')
+        print(f'{standard_deviation(final_list)}\n')
         print('Median')
-        print(f'{dict(zip(names, median(final_list)))}\n')
-        print('Gap from the next highest GPA')       
+        print(f'{median(final_list)}\n')
+        print('Grade point gap from the next highest GPA')       
         print(f'{next_highest(final_list)}\n')
         print('Letter grades')
-        print(f'{dict(zip(names, letter_grades(final_list)))}\n')
+        print(f'{letter_grades(final_list)}\n')
         
         
