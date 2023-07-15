@@ -230,7 +230,7 @@ if __name__ == '__main__':
         print(f'{standard_deviation(final_list)}\n')
         print('Median')
         print(f'{median(final_list)}\n')
-        print('Grade point gap from the next highest GPA')       
+        print('Grade point gap to the next highest GPA')       
         print(f'{next_highest(final_list)}\n')
         print('Letter grades')
         print(f'{letter_grades(final_list)}\n')
