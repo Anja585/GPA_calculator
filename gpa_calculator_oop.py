@@ -101,29 +101,18 @@ class Grade:
         else: 
             gpa_scale_grade = self.grade["F"]
         return gpa_scale_grade
-    
 
-class GPA_calculator:
+
+class Student_app:
     def __init__(self, student_name, **modules):
         self.student_name = student_name
         self.modules = modules
 
-    def calculate_gpa(self):
-            gpa_scale_grades = []
-            self.module_values = list(self.modules.values())
-            for percentage_grade in self.module_values:
-                g = Grade(percentage_grade)
-                gpa_scale_grade = g.percentage_points_to_gpa_scale_grades()
-                gpa_scale_grades.append(gpa_scale_grade)
-            gpa = np.average(gpa_scale_grades)
-            self.gpa_rounded = np.round(gpa, 2)
-            return self.student_name, self.gpa_rounded
-    
     def highest_scoring_module(self):
         self.sorted_modules = dict(sorted(self.modules.items(), key=lambda x: x[1]))
         highest_scoring_module = list(self.sorted_modules.keys())[-1]
         return self.student_name, highest_scoring_module
-
+    
     def lowest_scoring_module(self):
         lowest_scoring_module = list(self.sorted_modules.keys())[0]
         return self.student_name, lowest_scoring_module
@@ -147,19 +136,42 @@ class GPA_calculator:
                 letter_grades.append(letter_grade)
             result = dict(zip(module_names, letter_grades))
             return self.student_name, result
-    
+
+class GPA_calculator(Student_app):
+    def __init__(self, student_name, **modules):
+        Student_app.__init__(self, student_name, **modules)
+        
+    def calculate_gpa(self):
+            gpa_scale_grades = []
+            self.module_values = list(self.modules.values())
+            for percentage_grade in self.module_values:
+                g = Grade(percentage_grade)
+                gpa_scale_grade = g.percentage_points_to_gpa_scale_grades()
+                gpa_scale_grades.append(gpa_scale_grade)
+            gpa = np.average(gpa_scale_grades)
+            self.gpa_rounded = np.round(gpa, 2)
+            return self.student_name, self.gpa_rounded
+        
     # double-check this function -and compare - still doesn't work
-    # def next_highest(self, students):
-    #     gpas = []
-    #     gpa_sorted = sorted(gpas)
-    #     for s in students:
-    #         name, gpa = s.calculate_gpa()
-    #         gpas.append(gpa)
-    #     for i in gpa_sorted:
-    #         if i > self.gpa_rounded:
-    #             difference = np.round((i - self.gpa_rounded), 3)
-    #     return self.student_name, difference
-                        
+    def next_highest(self, students):
+        gpa_all = []
+        for s in students:
+            name, gpa = s.calculate_gpa()
+            gpa_all.append(gpa)
+        gpa_sorted = sorted(gpa_all)
+        for i in gpa_sorted:
+            if i == 4.2:
+                if i == self.gpa_rounded:
+                    difference = np.round((i - self.gpa_rounded), 3)
+                    return self.student_name, difference
+            elif i > self.gpa_rounded:
+                difference = np.round((i - self.gpa_rounded), 3)
+                return self.student_name, difference
+        if gpa_sorted[-1] == self.gpa_rounded:
+            difference = np.round((4.2 - self.gpa_rounded), 3)
+            return self.student_name, difference
+            
+                               
 def create_student():
     final_list = []
     file = str(input('Would you like to import a file (Y/N): '))
@@ -202,8 +214,6 @@ def file_import():
         final_list.append(s)
     return final_list
 
-
-            
                 
 # main function
 if __name__ == '__main__':
@@ -214,7 +224,7 @@ if __name__ == '__main__':
     lowest_scoring_modules = []
     st_deviations = []
     medians = []
-    next_highest = []
+    next_highest_gpas = []
     letter_grades = []
     for i in student_objects:
         gpa = i.calculate_gpa()
@@ -227,8 +237,8 @@ if __name__ == '__main__':
         st_deviations.append(standard_deviation)
         median = i.median()
         medians.append(median)
-        # print(i.next_highest(student_objects))
-        # next_highest.append(i)
+        next_highest_gpa = i.next_highest(student_objects)
+        next_highest_gpas.append(next_highest_gpa)
         letter_grade = i.letter_grades()
         letter_grades.append(letter_grade)
     if len(student_objects) == 0:
@@ -246,7 +256,7 @@ if __name__ == '__main__':
         print('Median')
         print(f'{dict(medians)}\n')
         print('Grade point gap to the next highest GPA')       
-        # print(f'{dict(next_highest)}\n')
+        print(f'{dict(next_highest_gpas)}\n')
         print('Letter grades')
         print(f'{dict(letter_grades)}\n')
         
