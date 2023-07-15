@@ -199,17 +199,20 @@ def letter_grades(final_list):
     return dict(zip(names,final_results))
 
 def next_highest(final_list):
-    gpa = list(calculate_gpa(final_list).values())
-    gpa_sorted = sorted(gpa)
-    names = list(final_list.keys())
+    gpa = calculate_gpa(final_list)
+    sorted_gpa = dict(sorted(gpa.items(), key=lambda x: x[1]))
+    gpa_sorted_values = list(sorted_gpa.values())
+    names_sorted = list(sorted_gpa.keys())
     differences = []
-    for i in range(len(gpa_sorted)):
-        difference = np.round((gpa_sorted[i] - gpa_sorted[i-1]), 3) 
+    for i in range(len(gpa_sorted_values)):
+        difference = np.round((gpa_sorted_values[i] - gpa_sorted_values[i-1]), 3) 
         differences.append(difference)
-    last = np.round((4.2 - gpa_sorted[-1]), 3)
+    last = np.round((4.2 - gpa_sorted_values[-1]), 3)
     differences.append(last)
     differences_final = differences[1:] 
-    return dict(zip(names, differences_final))
+    dict_sorted = dict(zip(names_sorted, differences_final))
+    final = {k: A.get(k, v) for k, v in gpa.items()}
+    return final
     
 
 # main function
