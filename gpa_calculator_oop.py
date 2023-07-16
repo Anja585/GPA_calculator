@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import tkinter.filedialog
 
-
+# Creates a grade class and manipulates percentage grade.  
 class Grade:
     grade = { 
         "A+": 4.2,
@@ -26,7 +26,8 @@ class Grade:
         }
     def __init__(self, percentage_grade):
         self.percentage_grade = percentage_grade
-
+    
+    # Converts percentage point to a letter grade. 
     def percentage_points_to_letter_grades(self):
         letter_grades = list(self.grade.keys())
         if self.percentage_grade >= 90:
@@ -65,6 +66,7 @@ class Grade:
             self.letter_grade = letter_grades[16]
         return self.letter_grade
     
+    # Converts percentage point to a gpa scale grade.
     def percentage_points_to_gpa_scale_grades(self):
         if self.percentage_grade >= 90:
             gpa_scale_grade = self.grade["A+"]
@@ -102,31 +104,36 @@ class Grade:
             gpa_scale_grade = self.grade["F"]
         return gpa_scale_grade
 
-
+# Creates a student object and calculates various student related indicators. 
 class Student_app:
     def __init__(self, student_name, **modules):
         self.student_name = student_name
         self.modules = modules
 
+    # Returns a tuple object with student name and highest scoring module. 
     def highest_scoring_module(self):
         self.sorted_modules = dict(sorted(self.modules.items(), key=lambda x: x[1]))
         highest_scoring_module = list(self.sorted_modules.keys())[-1]
         return self.student_name, highest_scoring_module
     
+    # Returns a tuple object with student name and lowest scoring module.
     def lowest_scoring_module(self):
         lowest_scoring_module = list(self.sorted_modules.keys())[0]
         return self.student_name, lowest_scoring_module
     
+    # Returns a tuple object with student name and standard deviation.
     def standard_deviation(self):
         st_deviation = np.std(self.module_values)
         st_deviation_rounded = round(st_deviation, 2) 
         return self.student_name, st_deviation_rounded
     
+    # Returns a tuple object with student name and median.
     def median(self):
         median = np.median(self.module_values)
         median_rounded = round(median, 2) 
         return self.student_name, median_rounded
     
+    # Returns a tuple object with student name and module names and letter grades in a dict object.
     def letter_grades(self):
             letter_grades = []
             module_names = list(self.modules.keys())
@@ -137,10 +144,12 @@ class Student_app:
             result = dict(zip(module_names, letter_grades))
             return self.student_name, result
 
+# Inherits properties from Student_app. 
 class GPA_calculator(Student_app):
     def __init__(self, student_name, **modules):
         Student_app.__init__(self, student_name, **modules)
-        
+
+    # Returns a tuple object with student name and gpa.    
     def calculate_gpa(self):
             gpa_scale_grades = []
             self.module_values = list(self.modules.values())
@@ -152,7 +161,7 @@ class GPA_calculator(Student_app):
             self.gpa_rounded = np.round(gpa, 2)
             return self.student_name, self.gpa_rounded
         
-    # double-check this function -and compare - still doesn't work
+    # Returns a tuple object with student name and missing gpa points to the next highest gpa.
     def next_highest(self, students):
         gpa_all = []
         for s in students:
@@ -171,7 +180,8 @@ class GPA_calculator(Student_app):
             difference = np.round((4.2 - self.gpa_rounded), 3)
             return self.student_name, difference
             
-                               
+# User interface for importing information to calculate GPA.
+# Returns a dictionary object with student names, modules and grades.
 def create_student():
     final_list = []
     file = str(input('Would you like to import a file (Y/N): '))
@@ -204,6 +214,8 @@ def create_student():
             final_list.append(s) 
     return final_list
 
+# Dialog for importing a CSV file. 
+# Returns a dictionary object with student name, modules and grades.
 def file_import():
     final_list = []
     filename = tkinter.filedialog.askopenfile()
@@ -215,7 +227,7 @@ def file_import():
     return final_list
 
                 
-# main function
+# Main function. 
 if __name__ == '__main__':
     os.system('cls')    
     student_objects = create_student() 
