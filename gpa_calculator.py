@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import tkinter.filedialog
 
-# maps letter grade to GPA scale
+# Maps letter grades to GPA scale.
 grade = { 
         "A+": 4.2,
         "A": 4,
@@ -24,6 +24,8 @@ grade = {
         "F": 1   
         }
 
+# User interface for importing information to calculate GPA.
+# Returns a dictionary object with student(s) name(s), modules and grades.
 def create_student():
     names = []
     marks_module_names = []
@@ -57,6 +59,8 @@ def create_student():
         final_list = dict(zip(names, marks_module_names))
     return final_list
 
+# Dialog for importing a CSV file. 
+# Returns a dictionary object with student(s) name(s), modules and grades.
 def file_import():
     filename = tkinter.filedialog.askopenfile()
     df = pd.read_csv(filename, index_col=0)
@@ -116,10 +120,9 @@ def map_percentage_points_to_grades(percentage_grade):
     else: 
         gpa_scale_grade = grade["F"]
         letter_grade = "F" 
-    return gpa_scale_grade, letter_grade
-    
+    return gpa_scale_grade, letter_grade    
 
-# returns gpa from a user input
+# Returns a dictionary object with names and gpas.
 def calculate_gpa(final_list):
     names = final_list.keys()
     final_gpa = []
@@ -135,7 +138,7 @@ def calculate_gpa(final_list):
         final_gpa.append(gpa_rounded)        
     return dict(zip(names,final_gpa))
 
-# returns the name of the highest scoring module
+# Returns a dictionary object with names and highest scoring modules.
 def highest_scoring_module(final_list):
     names = final_list.keys()
     highest_scoring_modules = []
@@ -146,7 +149,7 @@ def highest_scoring_module(final_list):
         highest_scoring_modules.append(highest_scoring_module)        
     return dict(zip(names,highest_scoring_modules)) 
 
-# returns the name of the lowest scoring module
+# Returns a dictionary object with names and lowest scoring modules.
 def lowest_scoring_module(final_list):
     names = final_list.keys()
     lowest_scoring_modules = []
@@ -157,7 +160,7 @@ def lowest_scoring_module(final_list):
         lowest_scoring_modules.append(lowest_scoring_module)        
     return dict(zip(names,lowest_scoring_modules))
 
-# returns standard deviation
+# Returns a dictionary object with names and standard deviation.
 def standard_deviation(final_list):
     names = final_list.keys()
     standard_deviations = []
@@ -169,7 +172,7 @@ def standard_deviation(final_list):
         standard_deviations.append(st_deviation_rounded)
     return dict(zip(names,standard_deviations))
 
-# returns median
+# Returns a dictionary object with names and median values.
 def median(final_list):
     names = final_list.keys()
     medians = []
@@ -181,8 +184,7 @@ def median(final_list):
         medians.append(median_rounded)
     return dict(zip(names,medians))
 
-
-# return module names and letter grades
+# Returns a dictionary object with names, modules and letter grades.
 def letter_grades(final_list):
     names = final_list.keys()
     final_results = []
@@ -198,6 +200,7 @@ def letter_grades(final_list):
         final_results.append(result)
     return dict(zip(names,final_results))
 
+# 
 def next_highest(final_list):
     gpa = calculate_gpa(final_list)
     sorted_gpa = dict(sorted(gpa.items(), key=lambda x: x[1]))
@@ -214,8 +217,7 @@ def next_highest(final_list):
     final = {k: dict_sorted.get(k, v) for k, v in gpa.items()}
     return final
     
-
-# main function
+# Main function. 
 if __name__ == '__main__':
     os.system('cls')    
     final_list = create_student()
