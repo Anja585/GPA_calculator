@@ -211,7 +211,7 @@ def next_highest(final_list):
     differences.append(last)
     differences_final = differences[1:] 
     dict_sorted = dict(zip(names_sorted, differences_final))
-    final = {k: A.get(k, v) for k, v in gpa.items()}
+    final = {k: dict_sorted.get(k, v) for k, v in gpa.items()}
     return final
     
 
