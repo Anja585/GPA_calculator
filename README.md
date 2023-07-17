@@ -14,6 +14,9 @@ Import file: Has to be csv format. Use MPPSample.csv as a template
 2. Run gpa_calculator.py
 4. Run gpa_calculator_oop.py
 
+## Future improvements
+Finalize procedural programing code in C.
+
 ## References
 1. Python, R. (2023). Python args and kwargs: Demystified. realpython.com. https://realpython.com/python-kwargs-and-args/
 2. How can I make a dictionary (dict) from separate lists of keys and values? (n.d.). Stack Overflow. https://stackoverflow.com/questions/209840/how-can-i-make-a-dictionary-dict-from-separate-lists-of-keys-and-values
