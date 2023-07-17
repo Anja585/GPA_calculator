@@ -1,8 +1,18 @@
-# GPA_calculator
-GPA calculator
+# multi-paradigm-programming-project
+## Project to the Multi-Paradigm Programming module 2023
+## Anja Antolkovic
 
+This repository contains the work done for a project for the Multi-Paradigm Programming module as part of the HDip in Data Analytics, ATU. The aim of the project was to buit GPA calculator for students in a fictional university in procedural programming and object-orientated programming style with exactly identical user experience in both implementations.
 
+Respect the following when running the code:
 
+Percentage grades: integer 
+Import file: Has to be csv format. Use MPPSample.csv as a template 
+
+## How to run the project
+1. Clone this repository
+2. Run gpa_calculator.py
+4. Run gpa_calculator_oop.py
 
 ## References
 1. Python, R. (2023). Python args and kwargs: Demystified. realpython.com. https://realpython.com/python-kwargs-and-args/
